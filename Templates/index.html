@@ -1,0 +1,129 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Tumor Classification Predictor</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+    </head>
+    <body class="bg-slate-50 min-h-screen text-slate-800 flex items-center justify-center p-4 sm:p-8">
+
+    <div class="max-w-4xl w-full bg-white rounded-2xl shadow-xl border border-slate-100 overflow-hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-6 text-white text-center">
+        <h1 class="text-2xl font-bold tracking-tight">Tumor Classification Predictor</h1>
+        <p class="text-blue-100 text-sm mt-1">Enter diagnostic cell nuclei measurements to evaluate malignancy risk</p>
+        </div>
+
+        <!-- Prediction Banner -->
+        {% if prediction %}
+        <div class="p-6 pb-0">
+        {% if prediction == 'Malignant' %}
+        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg flex items-center justify-between">
+            <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-red-600">Model Prediction</p>
+            <p class="text-lg font-bold text-red-800">Malignant</p>
+            </div>
+            <span class="px-3 py-1 text-xs font-medium bg-red-100 text-red-700 rounded-full">Requires Medical Attention</span>
+        </div>
+        {% else %}
+        <div class="bg-emerald-50 border-l-4 border-emerald-500 p-4 rounded-r-lg flex items-center justify-between">
+            <div>
+            <p class="text-xs font-semibold uppercase tracking-wider text-emerald-600">Model Prediction</p>
+            <p class="text-lg font-bold text-emerald-800">Benign</p>
+            </div>
+            <span class="px-3 py-1 text-xs font-medium bg-emerald-100 text-emerald-700 rounded-full">Non-Malignant Indicator</span>
+        </div>
+        {% endif %}
+        </div>
+        {% endif %}
+
+        <!-- Input Form -->
+        <form action="/predict" method="POST" class="p-6 space-y-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="symmetry_mean">Symmetry Mean</label>
+            <input type="number" step="any" required name="symmetry_mean" id="symmetry_mean" placeholder="e.g. 0.1819"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="fractal_dimension_mean">Fractal Dimension Mean</label>
+            <input type="number" step="any" required name="fractal_dimension_mean" id="fractal_dimension_mean" placeholder="e.g. 0.0597"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="radius_se">Radius SE</label>
+            <input type="number" step="any" required name="radius_se" id="radius_se" placeholder="e.g. 0.5435"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="texture_se">Texture SE</label>
+            <input type="number" step="any" required name="texture_se" id="texture_se" placeholder="e.g. 1.256"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="smoothness_se">Smoothness SE</label>
+            <input type="number" step="any" required name="smoothness_se" id="smoothness_se" placeholder="e.g. 0.0063"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="compactness_se">Compactness SE</label>
+            <input type="number" step="any" required name="compactness_se" id="compactness_se" placeholder="e.g. 0.0246"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="concave_points_se">Concave Points SE</label>
+            <input type="number" step="any" required name="concave_points_se" id="concave_points_se" placeholder="e.g. 0.0158"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="symmetry_se">Symmetry SE</label>
+            <input type="number" step="any" required name="symmetry_se" id="symmetry_se" placeholder="e.g. 0.0300"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="texture_worst">Texture Worst</label>
+            <input type="number" step="any" required name="texture_worst" id="texture_worst" placeholder="e.g. 23.41"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="smoothness_worst">Smoothness Worst</label>
+            <input type="number" step="any" required name="smoothness_worst" id="smoothness_worst" placeholder="e.g. 0.1622"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="concave_points_worst">Concave Points Worst</label>
+            <input type="number" step="any" required name="concave_points_worst" id="concave_points_worst" placeholder="e.g. 0.2654"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+            <div>
+            <label class="block text-xs font-semibold text-slate-600 mb-1" for="symmetry_worst">Symmetry Worst</label>
+            <input type="number" step="any" required name="symmetry_worst" id="symmetry_worst" placeholder="e.g. 0.4601"
+                class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none" />
+            </div>
+
+        </div>
+
+        <div class="pt-4 border-t border-slate-100 flex justify-end">
+            <button type="submit"
+            class="w-full sm:w-auto px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-semibold text-sm rounded-lg transition-colors shadow-sm focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+            Run Prediction
+            </button>
+        </div>
+        </form>
+    </div>
+
+    </body>
+    </html>
